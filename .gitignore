@@ -1,0 +1,25 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+.env
+
+# --- PISA data (OECD terms; do not redistribute) ---
+data/raw/
+data/clean/
+*.sav
+*.SAV
+*.sas7bdat
+*.dta
+*.zip
+
+# --- Generated outputs ---
+output/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

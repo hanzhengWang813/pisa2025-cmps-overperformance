@@ -1,0 +1,14 @@
+# Normalise line endings: LF in the repository, LF on checkout everywhere.
+# Without this, Windows clones rewrite the shell scripts to CRLF and
+# bash fails with "bad interpreter: /usr/bin/env: no such file or directory".
+* text=auto eol=lf
+
+*.sh    text eol=lf
+*.py    text eol=lf
+*.md    text eol=lf
+*.cff   text eol=lf
+
+*.png   binary
+*.pdf   binary
+*.sav   binary
+*.zip   binary
