@@ -85,14 +85,15 @@ working directory does not matter, but the numbered order does.
 | 7 | `06_ldw_process.py` | Aggregates item-level LDW records to per-student process indicators; applies the missing codes (9999997+) | `data/clean/ldw_process.csv.gz` |
 | 8 | `10_build.py` | Merges student, school and process data into the analysis file | `data/clean/analysis.csv.gz` |
 | 9 | `11_residual.py` | Constructs relative overperformance (pooled cubic regression, within-system standardisation, averaged over ten plausible values) | `data/clean/resid.csv.gz` |
-| 10 | `12_descriptive.py` | System-level descriptives, ESCS gradients across outcomes, urban/rural resource patterns | `output/tab1_country.csv`, `tab2_escs_gradient.csv`, `tab3_urban.csv`, `descriptive_report.txt` |
-| 11 | `13_models.py` | Models M1–M6: two-level models with school random intercepts, Rubin-pooled over ten plausible values; design-weighted OLS with school-clustered SE as a design-based check | `output/models_results.json`, `models_report.txt` |
-| 12 | `14_robust.py` | Robustness R1–R6: alternative residual definition, rapid responders removed, QCI dropped, alternative overperformer threshold, random ESCS slopes, Johnson–Neyman regions | `output/robust_results.json`, `robust_report.txt` |
-| 13 | `45_system_fe.py` | System fixed-effects check: whether pooling dilutes the slope through between-system variance | `output/system_fe_report.txt` |
-| 14 | `23_brr.py` | BRR standard errors (Fay = 0.5, 80 replicate weights) for the key estimates | `output/brr_results.json`, `brr_report.txt` |
-| 15 | `24_brr_china.py` | BRR for the QCI subsample estimates | `output/brr_china.txt` |
-| 16 | `25_brr_country.py` | Per-system ESCS slopes with BRR standard errors; significance classification | `output/brr_country_slopes.csv`, `brr_country_summary.txt` |
-| 17 | `52_figures_v2.py` | The five published figures, 300 dpi | `output/figures/fig1…fig5.png` |
+| 10 | `27_system_ranks.py` | Recomputes the pooled cubic residuals **in score points** (step 9 standardises them away) and ranks systems: absolute rank on CMPS, relative rank on the residual | `output/tab_system_resid.csv` |
+| 11 | `12_descriptive.py` | System-level descriptives, ESCS gradients across outcomes, urban/rural resource patterns | `output/tab1_country.csv`, `tab2_escs_gradient.csv`, `tab3_urban.csv`, `descriptive_report.txt` |
+| 12 | `13_models.py` | Models M1–M6: two-level models with school random intercepts, Rubin-pooled over ten plausible values; design-weighted OLS with school-clustered SE as a design-based check | `output/models_results.json`, `models_report.txt` |
+| 13 | `14_robust.py` | Robustness R1–R6: alternative residual definition, rapid responders removed, QCI dropped, alternative overperformer threshold, random ESCS slopes, Johnson–Neyman regions | `output/robust_results.json`, `robust_report.txt` |
+| 14 | `45_system_fe.py` | System fixed-effects check: whether pooling dilutes the slope through between-system variance | `output/system_fe_report.txt` |
+| 15 | `23_brr.py` | BRR standard errors (Fay = 0.5, 80 replicate weights) for the key estimates | `output/brr_results.json`, `brr_report.txt` |
+| 16 | `24_brr_china.py` | BRR for the QCI subsample estimates | `output/brr_china.txt` |
+| 17 | `25_brr_country.py` | Per-system ESCS slopes with BRR standard errors; significance classification | `output/brr_country_slopes.csv`, `brr_country_summary.txt` |
+| 18 | `52_figures_v2.py` | The five published figures, 300 dpi | `output/figures/fig1…fig5.png` |
 
 `run_all.sh` runs the scripts in this order, skipping the exploration scripts (`01`–`03` and `05`);
 step 1 runs only when the `.zip` archives are present. The exploration scripts are kept because
@@ -129,14 +130,22 @@ nesting.
 
 | Manuscript element | Source |
 |---|---|
-| Table 1 (system-level performance) | `output/tab1_country.csv` (step 10) |
-| Table 2 (multilevel models) | `output/models_results.json` (step 11) |
-| Table 3 (robustness) | `output/robust_results.json` (step 12) |
-| Figure 1 (CMPS against mathematics) | step 17, panel from `tab1_country.csv` |
-| Figure 2 (conditional slopes) | step 17, refits the full model |
-| Figure 3 (overperformers by ESCS quintile) | step 17, from `tab2_escs_gradient.csv` |
-| Figure 4 (process differences) | step 17, from `ldw_process.csv.gz` |
-| Figure 5 (per-system slopes) | step 17, from `brr_country_slopes.csv` |
+| Table 1, columns CMPS / mathematics / absolute rank | `output/tab_system_resid.csv` (step 10), 10-PV averages |
+| Table 1, columns relative rank / residual in points | `output/tab_system_resid.csv` (step 10) |
+| Table 2 (multilevel models) | `output/models_results.json` (step 12) |
+| Table 3 (robustness) | `output/robust_results.json` (step 13) |
+| Figure 1 (CMPS against mathematics) | step 18, panel from `tab1_country.csv` |
+| Figure 2 (conditional slopes) | step 18, refits the full model |
+| Figure 3 (overperformers by ESCS quintile) | step 18, from `tab2_escs_gradient.csv` |
+| Figure 4 (process differences) | step 18, from `ldw_process.csv.gz` |
+| Figure 5 (per-system slopes) | step 18, from `brr_country_slopes.csv` |
+
+Two conventions coexist and explain the small differences between `tab1_country.csv` and the
+published Table 1. `12_descriptive.py` computes descriptive means from the first plausible value
+only, the convention used in OECD reports for descriptive tables; `27_system_ranks.py` averages
+the ten plausible values, which is what Table 1 reports. For the four Chinese provinces the
+difference is 560.71 against 560.31 on CMPS, and the residual is −27.6 points under the
+first-value convention against −28.0 as the ten-value average the paper reports.
 
 ## Known limitations that the code makes visible
 

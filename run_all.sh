@@ -18,6 +18,7 @@ run 04_school_index.py     # school-level resources and location
 run 06_ldw_process.py      # item-level LDW -> process indicators
 run 10_build.py            # merge into the analysis file
 run 11_residual.py         # relative overperformance
+run 27_system_ranks.py     # system residuals in score points and their ranks
 run 12_descriptive.py      # descriptives and gradients
 run 13_models.py           # multilevel models M1-M6
 run 14_robust.py           # robustness R1-R6
